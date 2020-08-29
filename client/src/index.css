@@ -1,0 +1,39 @@
+html{
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height:100%;
+}
+body {
+	margin: 0;
+	font-family: 'Do Hyeon', sans-serif;
+	color:#505050;
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height:100%;
+}
+#root{height:100%;}
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+	monospace;
+}
+.btn{
+	border-radius: 20px;
+}
+a{cursor: pointer;}
+a:hover{
+	color: #4dabf7 !important;
+}
+.label__link{
+	color: #4DABF7;
+}
+.modal-content{
+	border-radius: 20px;
+}
+.modal-header{
+	border-bottom: none;
+}
+.modal-footer{
+	border-top: none;
+}

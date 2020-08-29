@@ -1,0 +1,18 @@
+.call__image{
+	max-width: 100%;
+	width: 350px;
+	margin: 20px;
+}
+.call__start-img{
+	max-width: 100%;
+	width: 320px;
+	margin:20;
+}
+.call__start-modal{
+	text-align: center;
+}
+.inline__block{display: inline-block;}
+.img-responsive{
+	width: 320px;
+	max-width: 100%;
+}
