@@ -25,8 +25,12 @@ function Login(props) {
 		<div className="login">
 			<img src={loginImage} className="login__logo" alt="logo" />
 			<br/>
+			<div>
+				<h3>One to one video calls made easy.</h3>
+				<h4>Connect with friends, family, work instantly without any registration.<br /> Just enter a username and enjoy.</h4>
+			</div>
 			<input type="text" value={username} onChange={e => { setUsername(e.target.value) }} className="form-control login__username bg-light border-0 small" placeholder="Enter your username" />
-			<button onClick={login} className="btn btn-primary">Continue</button>
+			<button style={{'width':'320px'}} onClick={login} className="btn btn-primary">Continue</button>
 		</div>
 	)
 }

@@ -84,7 +84,7 @@ class App extends Component {
 		);
 		return(
 			<Dropdown className="header__actions">
-				<DropdownButton key="left" title={<i className="fas fa-users-cog"></i>} variant="light" id="dropdown-basic">
+				<DropdownButton key="left" title={<i className="fas fa-bars"></i>} variant="light" id="dropdown-basic">
 					{ this.state.username ? logout : '' }
 					{ themeButton }
 				</DropdownButton>
@@ -122,7 +122,7 @@ class App extends Component {
 		this.checkIfLoggedIn();
 	}
 	render() {
-		const computedScreen = this.state.username ? <Main username={this.state.username} /> : <Login username={this.state.username} checkIfLoggedIn={this.checkIfLoggedIn} updateAppState={this.updateAppState} />;
+		const computedScreen = this.state.username ? <Main user_id={this.state.user_id} /> : <Login username={this.state.username} checkIfLoggedIn={this.checkIfLoggedIn} updateAppState={this.updateAppState} />;
 		const options = this.renderOptions();
 		const styling = this.renderStyling();
 		return (

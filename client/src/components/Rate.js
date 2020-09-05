@@ -43,7 +43,7 @@ function Rate(props) {
 			}
 			<br />
 			<div>
-				<button onClick={() => { props.setCallState(true) }} className="btn btn-primary">Enter call again</button>
+				<button onClick={() => { props.startSending() }} className="btn btn-primary">Enter call again</button>
 				<Link to='/' className="btn btn-light">
 					Go to home
 				</Link>
