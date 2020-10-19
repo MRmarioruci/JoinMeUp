@@ -17,7 +17,7 @@ function CallControls(props) {
 				<i className="fas fa-video"></i>
 			</button>
 			&nbsp;
-			<button onClick={() => { props.hangup() }} className="btn btn-danger btn-round zoom__on-hover" data-tippy-content="Hang up">
+			<button onClick={() => { props.hangup(false) }} className="btn btn-danger btn-round zoom__on-hover" data-tippy-content="Hang up">
 				<i className="fas fa-phone-slash"></i>
 			</button>
 			&nbsp;

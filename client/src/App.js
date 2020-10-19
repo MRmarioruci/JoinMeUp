@@ -57,7 +57,10 @@ class App extends Component {
 				this.updateAppState(data.username,data.user_id);
 			}
 		}else{
+			console.log(data);
 			if(data == 'not logged'){
+				this.checkIfLoggedIn();
+			}else{
 				this.checkIfLoggedIn();
 			}
 		}

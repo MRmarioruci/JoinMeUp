@@ -18,20 +18,25 @@ function Login(props) {
 		}else{
 			if(data == 'logged'){
 				props.checkIfLoggedIn();
+			}else if(data === 'exists'){
+				alert('username exists');
 			}
 		}
 	}
 	return (
+		<>
 		<div className="login">
 			<img src={loginImage} className="login__logo" alt="logo" />
-			<br/>
+			<br/><br/>
 			<div>
 				<h3>One to one video calls made easy.</h3>
 				<h4>Connect with friends, family, work instantly without any registration.<br /> Just enter a username and enjoy.</h4>
 			</div>
+			<br/>
 			<input type="text" value={username} onChange={e => { setUsername(e.target.value) }} className="form-control login__username bg-light border-0 small" placeholder="Enter your username" />
 			<button style={{'width':'320px'}} onClick={login} className="btn btn-primary">Continue</button>
 		</div>
+		</>
 	)
 }
 

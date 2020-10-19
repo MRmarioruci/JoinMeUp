@@ -15,7 +15,8 @@ class UserPage extends Component {
 			showStartCallModal:false,
 			showJoinCallModal:false,
 			roomName: '',
-			linkCopied:false
+			linkCopied:false,
+			roomExists: false,
 		}
 		this.showModal = this.showModal.bind(this)
 		this.closeModal = this.closeModal.bind(this)
@@ -32,10 +33,28 @@ class UserPage extends Component {
 	onRoomNameChange(event){
 		this.setState({
 			roomName: event.target.value,
-			linkCopied:false
-		}, () => {
-
-			console.log('TBI check if room name exists');
+			linkCopied:false,
+		}, async () => {
+			let o = {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ roomName: this.state.roomName })
+			};
+			const response = await fetch('/roomExists', o);
+			const {status,data} = await response.json();
+			if(status == 'ok'){
+				this.setState({
+					roomExists:false
+				})
+			}else{
+				if(data === 'not logged'){
+					alert('not logged in');
+				}else{
+					this.setState({
+						roomExists: true
+					})
+				}
+			}
 		})
 	}
 	renderLinkShare(){
@@ -58,8 +77,8 @@ class UserPage extends Component {
 		);
 	}
 	render() {
-		const {roomName} = this.state;
-		const shareLink = roomName ? this.renderLinkShare() : '';
+		const {roomName, roomExists} = this.state;
+		const shareLink = roomName && !roomExists ? this.renderLinkShare() : '';
 		return (
 			<div>
 				<h2>Welcome <span className="label__link">{this.props.username}</span>.</h2>
@@ -82,15 +101,23 @@ class UserPage extends Component {
 							Create a new room and share with friends
 						</div>
 						<input type="text" value={roomName} onChange={ this.onRoomNameChange } className="form-control login__username bg-light border-0 small" placeholder="Enter a room name" />
+						<div>
+						{
+							roomExists && <div className="text-danger">Room name is taken. Please use another name or join the room</div>
+						}
+					</div>
 						{ shareLink }
 					</Modal.Body>
 					<Modal.Footer>
 						<Button variant="secondary" onClick={ () => this.closeModal('showStartCallModal')}>
 							Close
 						</Button>
-						<Link to={`/call/${roomName}`} className="btn btn-primary" disabled={roomName ? false : true} onClick={ () => this.closeModal('showStartCallModal')}>
-							Start
-						</Link>
+						{
+							(roomName && !roomExists) &&
+							<Link to={`/call/${roomName}`} className="btn btn-primary" onClick={ () => this.closeModal('showStartCallModal')}>
+								Start
+							</Link>
+						}
 					</Modal.Footer>
 				</Modal>
 				<Modal show={this.state.showJoinCallModal} onHide={ () => this.closeModal('showJoinCallModal')} size="lg">

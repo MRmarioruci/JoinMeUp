@@ -3,24 +3,37 @@ const Room = require('./Room');
 
 module.exports = function Registry(){
 	const userRegistry = {};
+	const userRegistryByUsername = {};
 	const roomRegistry = {};
 	this.addUser = (data) => {
 		if(userRegistry[data.user_id] === undefined){
-			userRegistry[data.user_id] = new User(data);
+			let newUser = new User(data);
+			userRegistry[data.user_id] = newUser;
+			userRegistryByUsername[data.username] = newUser;
+			return newUser;
 		}else{
-			//console.log('user exists');
+			return 'exists';
 		}
 	}
 	this.getUser = (user_id) => {
 		if(userRegistry[user_id]){
 			return userRegistry[user_id];
 		}else{
-			return null;
+			return false;
+		}
+	}
+	this.getUserByUserName = (username) => {
+		if(userRegistryByUsername[username]){
+			return userRegistryByUsername[username];
+		}else{
+			return false;
 		}
 	}
 	this.deleteUser = (user_id) => {
 		if(userRegistry[user_id]){
+			let user = userRegistry[user_id];
 			delete userRegistry[user_id];
+			delete userRegistry[user.getUsername()];
 		}else{
 			console.log('user does not exist');
 		}
@@ -37,8 +50,13 @@ module.exports = function Registry(){
 		if( roomRegistry[room] ){
 			return roomRegistry[room];
 		}else{
-			return null;
+			return false;
 		}
+	}
+	this.clearData = () => {
+		roomRegistry = {};
+		userRegistry = {};
+		userRegistryByUsername = {};
 	}
 
 }

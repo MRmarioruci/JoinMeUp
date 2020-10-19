@@ -4,6 +4,7 @@ module.exports = function Room(name){
 	room.name = name;
 	room.id = uuidv4();
 	room.pipeline = null;
+	room.userCount = 0;
 	room.createPipeline = (kurentoClient) => {
 		return new Promise(function (resolve, reject) {
 			kurentoClient.create('MediaPipeline', function(error, pipeline) {

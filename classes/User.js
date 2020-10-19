@@ -36,7 +36,7 @@ module.exports = function User(data) {
 		return username;
 	}
 	user.sendVideo = async (data,room) => {
-		const endpoint = await user.generateMedia(user, 'outgoing', room);
+		const endpoint = await user.generateMedia(room);
 		const sdpAnswer = await endpoint.processOffer(data.sdpOffer);
 		websocket.emit('my video', {
 			"sdpAnswer": sdpAnswer,
@@ -51,7 +51,7 @@ module.exports = function User(data) {
 					console.log(err);
 					reject(err);
 				}else{
-					console.log('Connected');
+					console.log('Connected', user.getUsername(), 'with ', peer.getUsername());
 					resolve();
 				}
 			})
@@ -60,26 +60,24 @@ module.exports = function User(data) {
 	user.getPeerVideo = async (peer, room, sdpOffer) => {
 		await user.connect(peer);
 		await peer.connect(user);
+		user.setIncoming(peer.getEndpoint());
+		peer.setIncoming(user.getEndpoint());
 	}
-	user.generateMedia = (target_user, type, room) => {
+	user.generateMedia = (room) => {
 		return new Promise( (resolve,reject) => {
 			room.pipeline.create('WebRtcEndpoint', (error, webRtcEndpoint) => {
 				if (error) {
 					console.error('Error creating endpoint', error);
 					reject(error);
 				}else{
-					if(type == 'outgoing'){
-						user.setOutgoing(webRtcEndpoint);
-					}else{
-						user.setIncoming(webRtcEndpoint);
-					}
+					user.setOutgoing(webRtcEndpoint);
 					webRtcEndpoint.on('OnIceCandidate', function(event) {
 						const candidate = kurento.getComplexType('IceCandidate')(event.candidate);
 						const response = {
-							"user_id": target_user.getId(),
+							"user_id": user.getId(),
 							"candidate": candidate,
 						}
-						target_user.getWebsocket().emit('iceCandidate',response);
+						user.getWebsocket().emit('iceCandidate',response);
 					});
 					resolve(webRtcEndpoint);
 				}
@@ -88,6 +86,9 @@ module.exports = function User(data) {
 	}
 	user.onIceCandidate = ( _candidate) => {
 		var candidate = kurento.register.complexTypes.IceCandidate(_candidate);
-		outgoingWebRtcEndpoint.addIceCandidate(candidate);
+		if(outgoingWebRtcEndpoint) outgoingWebRtcEndpoint.addIceCandidate(candidate);
+	}
+	user.disconnect = () => {
+		
 	}
 }

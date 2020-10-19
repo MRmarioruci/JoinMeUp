@@ -59,14 +59,16 @@ class CallPage extends Component {
 		this.socket.on('started communication', (msg) => {
 
 		});
+		this.socket.on('disconnect', (msg) => {
+			console.log(msg);
+		})
 	}
 	joinRoom = () => {
 		let msg = {
 			'user_id': this.props.user_id,
 			'room': this.props.match.params.id
 		}
-		this.socket.emit('join room', msg, (success) => {
-			//Loader
+		this.socket.emit('join room', msg, (err, success) => {
 			if(success){
 				this.startSending();
 			}
