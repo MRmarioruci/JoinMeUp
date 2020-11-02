@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import logo from './images/logo.svg';
 import './App.css';
-import Login from './components/Login';
+import Forms from './components/Forms';
 import Main from './components/Main';
 import Footer from './components/Footer';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
@@ -125,7 +125,7 @@ class App extends Component {
 		this.checkIfLoggedIn();
 	}
 	render() {
-		const computedScreen = this.state.username ? <Main user_id={this.state.user_id} /> : <Login username={this.state.username} checkIfLoggedIn={this.checkIfLoggedIn} updateAppState={this.updateAppState} />;
+		const computedScreen = this.state.username ? <Main user_id={this.state.user_id} /> : <Forms username={this.state.username} checkIfLoggedIn={this.checkIfLoggedIn} updateAppState={this.updateAppState} />;
 		const options = this.renderOptions();
 		const styling = this.renderStyling();
 		return (

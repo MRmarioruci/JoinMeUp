@@ -9,7 +9,6 @@ module.exports = function Registry(){
 		if(userRegistry[data.user_id] === undefined){
 			let newUser = new User(data);
 			userRegistry[data.user_id] = newUser;
-			userRegistryByUsername[data.username] = newUser;
 			return newUser;
 		}else{
 			return 'exists';

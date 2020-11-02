@@ -9,6 +9,7 @@ const redisClient  = redis.createClient();
 const http = require("http").Server(app);
 const io = require('socket.io')(http);
 const kurento = require('kurento-client');
+const mysql = require('mysql');
 
 /**Local classes and utilities */
 const Router = require('./classes/Router');
@@ -21,6 +22,15 @@ const SocketHandler = require('./classes/Socket.js');
 const redisPort = 6379;
 const port = 5000;
 const KURENTO_CLIENT_URI = 'ws://'+ network.getLocalIPv4() + ':8888/kurento';
+const dbConfig = {
+	connectionLimit : 10,
+	host     : 'localhost',//process.env.SQL_HOST,
+	user     : 'mario',//process.env.SQL_USER,
+	password : 'smilemalaka',//process.env.SQL_PASSWORD,
+	database : 'onOne',//process.env.SQL_DATABASE,
+	charset  : 'utf8mb4'
+};
+const CONNECTION = mysql.createPool(dbConfig);
 
 app.get('/', (req,res)=>{
 	res.json('Hello');
@@ -33,7 +43,7 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-const RouteHandler = new Router(app, Registry);
+const RouteHandler = new Router(app, Registry, CONNECTION);
 http.listen(port,() => {
 	console.log(`Server started on port ${port}`);
 })

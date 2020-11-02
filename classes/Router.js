@@ -1,5 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
-module.exports = function Router(app, Registry){
+const User_Model = require('../models/User_Model');
+
+module.exports = function Router(app, Registry, CONNECTION){
 	let router = this;
 	app.post('/isLoggedIn',(req,res) => {
 		let o = {'status':'ok','data':false};
@@ -13,26 +15,28 @@ module.exports = function Router(app, Registry){
 		}
 		res.json(o);
 	});
-	app.post('/login',(req,res) => {
+	app.post('/checkCredentials',async (req,res) => {
 		let {session} = req;
+		let o = {'status': 'err', 'data': false};
 		if(session.username && session.user_id) {
 			Registry.addUser({'username': session.username, 'user_id': session.user_id});
 			return res.json({'status':'err','data':'logged'});
 		}
-		const exists = Registry.getUserByUserName(req.body.username);
-		let o = {'status': 'err', 'data': false};
+		const exists = await User_Model.getUserByUserName(req.body.username, CONNECTION).catch( (err) => {});
 		if(!exists){
-			session.username = req.body.username;
-			session.user_id = uuidv4();
-			const user = Registry.addUser({'username': session.username, 'user_id': session.user_id});
-			if(user){
+			const new_user = User_Model.addUser(req.body.username, req.body.password, CONNECTION).catch( (err) => {});
+			if(new_user){
+				session.username = req.body.username;
+				session.user_id = new_user;
+				Registry.addUser({'username': session.username, 'user_id': session.user_id});
 				o.status = 'ok';
 				o.data = { 'username':session.username,'user_id':session.user_id };
-			}else{
-				o.data = 'exists';
 			}
 		}else{
-			o.data = 'exists';
+			const isPasswordCorrect = await User_Model.checkPassword(req.body.username, req.body.password, CONNECTION).catch( (err) => {});
+			if(isPasswordCorrect){
+
+			}
 		}
 		res.json(o);
 	});
