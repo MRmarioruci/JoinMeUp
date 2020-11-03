@@ -15,30 +15,53 @@ module.exports = function Router(app, Registry, CONNECTION){
 		}
 		res.json(o);
 	});
-	app.post('/checkCredentials',async (req,res) => {
+	app.post('/login',async (req,res) => {
 		let {session} = req;
 		let o = {'status': 'err', 'data': false};
 		if(session.username && session.user_id) {
 			Registry.addUser({'username': session.username, 'user_id': session.user_id});
-			return res.json({'status':'err','data':'logged'});
+			return res.json({'status':'ok','data':'logged'});
 		}
 		const exists = await User_Model.getUserByUserName(req.body.username, CONNECTION).catch( (err) => {});
 		if(!exists){
-			const new_user = User_Model.addUser(req.body.username, req.body.password, CONNECTION).catch( (err) => {});
+			return res.json({'status':'err','data':'register'});
+			/* const new_user = User_Model.addUser(req.body.username, req.body.password, CONNECTION).catch( (err) => {});
 			if(new_user){
 				session.username = req.body.username;
 				session.user_id = new_user;
 				Registry.addUser({'username': session.username, 'user_id': session.user_id});
 				o.status = 'ok';
 				o.data = { 'username':session.username,'user_id':session.user_id };
-			}
+			} */
 		}else{
 			const isPasswordCorrect = await User_Model.checkPassword(req.body.username, req.body.password, CONNECTION).catch( (err) => {});
 			if(isPasswordCorrect){
-
+				Registry.addUser({'username': session.username, 'user_id': session.user_id});
+				return res.json({'status':'ok','data':'login'});
+			}else{
+				return res.json({'status':'err','data':'invalid pass'});
 			}
 		}
-		res.json(o);
+		return res.json(o);
+	});
+	app.post('/register',async (req,res) => {
+		let {session} = req;
+		if(session.username && session.user_id) {
+			Registry.addUser({'username': session.username, 'user_id': session.user_id});
+			return res.json({'status':'err','data':'logged'});
+		}
+		const exists = await User_Model.getUserByUserName(req.body.username, CONNECTION).catch( (err) => {});
+		if(exists){
+			return res.json({'status':'err','data':'exists'});
+		}else{
+			const new_user = await User_Model.addUser(req.body.username, req.body.password, CONNECTION).catch( (err) => {});
+			if(new_user){
+				session.username = req.body.username;
+				session.user_id = new_user;
+				Registry.addUser({'username': session.username, 'user_id': session.user_id});
+				return res.json({'status':'ok','data':{ 'username':session.username,'user_id':session.user_id }});
+			}
+		}
 	});
 	app.post('/logout',(req,res) => {
 		if(!req.session.username && !res.session.user_id) return res.json({'status':'err','data':'not logged'});

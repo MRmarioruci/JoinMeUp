@@ -5,7 +5,6 @@ import Forms from './components/Forms';
 import Main from './components/Main';
 import Footer from './components/Footer';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
-
 class App extends Component {
 	constructor(props) {
 		super(props)
@@ -125,7 +124,7 @@ class App extends Component {
 		this.checkIfLoggedIn();
 	}
 	render() {
-		const computedScreen = this.state.username ? <Main user_id={this.state.user_id} /> : <Forms username={this.state.username} checkIfLoggedIn={this.checkIfLoggedIn} updateAppState={this.updateAppState} />;
+		const computedScreen = this.state.username ? <Main user_id={this.state.user_id} /> : <Forms username={this.state.username} checkIfLoggedIn={this.checkIfLoggedIn} updateAppState={this.updateAppState} theme={this.state.theme} />;
 		const options = this.renderOptions();
 		const styling = this.renderStyling();
 		return (
