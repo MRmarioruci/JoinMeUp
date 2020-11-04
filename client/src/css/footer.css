@@ -12,3 +12,6 @@
 .footer__left{
 	float: left;
 }
+.close{
+	font-size: 50px !important;
+}

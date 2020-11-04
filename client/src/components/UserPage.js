@@ -105,7 +105,7 @@ class UserPage extends Component {
 						{
 							roomExists && <div className="text-danger">Room name is taken. Please use another name or join the room</div>
 						}
-					</div>
+						</div>
 						{ shareLink }
 					</Modal.Body>
 					<Modal.Footer>

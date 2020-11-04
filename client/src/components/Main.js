@@ -16,7 +16,6 @@ function Main(props){
     				<CallPage {...routeProps} {...props} />)}
 				/>
 			</Switch>
-			{/* compCurrentScreen */}
 		</Router>
 	)
 }

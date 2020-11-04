@@ -13,7 +13,7 @@ module.exports = {
 					reject('err');
 				}else{
 					if(res.length > 0){
-						resolve(true);
+						resolve(res[0].id);
 					}else{
 						resolve(false);
 					}

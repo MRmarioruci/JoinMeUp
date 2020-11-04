@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
 	})
 })
 process.on('SIGTERM', function () {
-	io.socprocesskets.emit('server shut down', {'timeout':5000});
+	io.sockets.emit('server shut down', {'timeout':5000});
 	Registry.clearData();
 	process.exit(0);
 });

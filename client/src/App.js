@@ -5,6 +5,7 @@ import Forms from './components/Forms';
 import Main from './components/Main';
 import Footer from './components/Footer';
 import {Dropdown, DropdownButton} from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 class App extends Component {
 	constructor(props) {
 		super(props)
@@ -34,6 +35,7 @@ class App extends Component {
 				this.updateAppState(data.username,data.user_id);
 			}else{
 				this.updateAppState('','');
+				/* this.props.history.push('/'); */
 			}
 		}
 	}
@@ -54,11 +56,12 @@ class App extends Component {
 		if(status == 'ok'){
 			if(data){
 				this.updateAppState(data.username,data.user_id);
+				/* this.props.history.push('/'); */
 			}
 		}else{
-			console.log(data);
 			if(data == 'not logged'){
 				this.checkIfLoggedIn();
+				/* this.props.history.push('/'); */
 			}else{
 				this.checkIfLoggedIn();
 			}
