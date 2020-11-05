@@ -16,14 +16,14 @@ function Rate(props) {
 				(
 				<div>
 					<img className="img-responsive" src={ thankImage } alt="thank you"/>
-					<h2>Thank you for choosing onOne!</h2>
+					<h2>Thank you for choosing JoinMeUp!</h2>
 				</div>
 				)
 				:
 				(
 				<div>
 					<img  src={ rateCallImage } className="rate__call-img" />
-					<h2>Please take a second to rate your onOne call experience.</h2>
+					<h2>Please take a second to rate your JoinMeUp call experience.</h2>
 					<div className="text-center">
 						<div className="rate">
 							<input type="radio" onClick={() => { submitRating(5) } } id="star5" name="rate" value="5" />

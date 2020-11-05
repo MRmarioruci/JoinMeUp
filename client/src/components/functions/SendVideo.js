@@ -4,7 +4,6 @@ function SendVideo(socket,user_id) {
 	const onIceCandidate = function (candidate) {
 		socket.emit('onIceCandidate', {
 			candidate: candidate,
-			// mediaId: media.id(),
 			user_id: user_id,
 		});
 	}
@@ -36,7 +35,6 @@ function SendVideo(socket,user_id) {
 			}
 			socket.emit('send video', {
 				user_id : user_id,
-				// senderMediaId : media.id(),
 				sdpOffer : sdpOffer
 			});
 		});

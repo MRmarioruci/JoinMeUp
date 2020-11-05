@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import logo from './images/logo.svg';
+import logo from './images/logo.png';
 import './App.css';
 import Forms from './components/Forms';
 import Main from './components/Main';
@@ -135,7 +135,7 @@ class App extends Component {
 				<header className="header">
 					<a className="logo__contain" href="/">
 						<img src={logo} className="logo" alt="logo" />
-						<span className="logo__text">onOne</span>
+						&nbsp;<span className="logo__text">JoinMeUp</span>
 					</a>
 					{ options }
 				</header>

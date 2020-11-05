@@ -3,7 +3,7 @@ import {Modal, Button} from 'react-bootstrap';
 import '../css/footer.css';
 
 function Footer() {
-	const [showCreditsModal, setModal ] = useState('');
+	const [showCreditsModal, setModal ] = useState(false);
 	const year = new Date().getFullYear();
 	return (
 		<div className="footer">

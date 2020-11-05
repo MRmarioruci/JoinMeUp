@@ -57,7 +57,8 @@ class CallPage extends Component {
 			}
 		});
 		this.socket.on('started communication', (msg) => {
-
+			alert('Communication started');
+			console.log(msg);
 		});
 		this.socket.on('disconnect', (msg) => {
 			console.log(msg);
