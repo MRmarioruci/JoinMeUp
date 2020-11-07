@@ -1,6 +1,6 @@
 module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 	let sk = this;
-	socket.on('join room',(msg,cb) => {
+	socket.on('join room',async (msg,cb) => {
 		const user = Registry.getUser(msg.user_id);
 		if(!user){
 			cb('user does not exist', false);
@@ -9,41 +9,31 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 			let room = Registry.getRoom(msg.room);
 			if(room){
 				if(user.getRoomName() !== room.name){
-					console.log(room.userCount);
 					if(room.userCount < 3){
 						console.log('Adding user ',user.getUsername(),' to room', msg.room);
-						socket.join(msg.room, () => {
-							room.userCount++;
-							user.setRoomName(msg.room);
-							console.log(room.name, 'has ', room.userCount, ' participants');
-							cb(null, true);
-						});
+						cb(null, {logged: join(room, user) });
 					}else{
-						console.log('Room', msg.room, ' is full');
+						console.log(`Room ${msg.room} is full`);
 						cb('room full', false);
 					}
 				}else{
-					socket.join(msg.room, () => {});
-					console.log('User ',user.getUsername(),' already connected to room', msg.room);
-					cb('already connected', false);
+					cb(null, {logged: join(room, user) });
 				}
 			}else{
 				console.log('room does not exist');
 				console.log('Adding user ',user.getUsername(),' to room', msg.room);
-				socket.join(msg.room,async () => {
-					console.log('Registering room', msg.room);
-					let room = await Registry.addRoom(kurentoClient, msg.room);
-					if(user.getRoomName() != room.name) room.userCount++;
-					console.log(room.name, 'has ', room.userCount, ' participants');
-					cb(null, true);
-				});
+				console.log('Registering room', msg.room);
+				let room = await Registry.addRoom(kurentoClient, msg.room);
+				if(room){
+					cb(null, {logged: join(room, user) });
+				}
 			}
 		}
 	})
 	socket.on('send video', (msg,cb) => {
 		const user = Registry.getUser(msg.user_id);
 		if(!user){
-			console.log('user does not exist');
+			console.log(`User ${msg.user_id} is not registered`);
 			if(cb) cb(false);
 		}else{
 			let user_room = Registry.getRoom( user.getRoomName() );
@@ -77,4 +67,26 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 			user.onIceCandidate(msg.candidate);
 		}
 	})
+	socket.on('disconnect', () => {
+		const user = Registry.getByWebsocket(socket);
+		if(user){
+			const room = Registry.getRoom( user.getRoomName() );
+			if(room){
+				room.decreaseCounter();
+			}
+			user.disconnect();
+			Registry.deleteUser(user.getId());
+		}
+	})
+	function join(room, user){
+		let loggedUsers = Registry.getUsersByRoom(room.name);
+		socket.join(room.name, () => {
+			if(user.getRoomName() != room.name){
+				room.increaseCounter();
+				user.setRoomName(room.name);
+			}
+			console.log(`${room.name} has ${room.userCount} participants`);
+		});
+		return loggedUsers;
+	}
 }

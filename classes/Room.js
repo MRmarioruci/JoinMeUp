@@ -17,4 +17,12 @@ module.exports = function Room(name){
 			});
 		})
 	}
+	room.increaseCounter = () => {
+		room.userCount++;
+		console.log(`Room ${room.name} has ${room.userCount} participants`);
+	}
+	room.decreaseCounter = () => {
+		room.userCount--;
+		console.log(`Room ${room.name} has ${room.userCount} participants`);
+	}
 }

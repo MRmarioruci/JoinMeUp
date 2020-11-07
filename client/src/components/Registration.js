@@ -40,7 +40,7 @@ function Registration(props) {
 			</center>
 			<h4>Register quickly and enjoy!</h4>
 			<input type="text" value={username} onChange={e => { setUsername(e.target.value) }} className="form-control login__input bg-light border-0 small" placeholder="Enter a username" />
-			<input type="text" value={password} onChange={e => { setPassword(e.target.value) }} className="form-control login__input bg-light border-0 small" placeholder="Enter a password" />
+			<input type="password" value={password} onChange={e => { setPassword(e.target.value) }} className="form-control login__input bg-light border-0 small" placeholder="Enter a password" />
 			<div className="text-danger">
 				{ errorMessage }
 			</div>

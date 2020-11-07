@@ -89,7 +89,7 @@ class App extends Component {
 		);
 		return(
 			<Dropdown className="header__actions">
-				<DropdownButton key="left" title={<i className="fas fa-bars"></i>} variant="light" id="dropdown-basic">
+				<DropdownButton key="left" title="Menu" variant="primary" id="dropdown-basic">
 					{ this.state.username ? logout : '' }
 					{ themeButton }
 				</DropdownButton>

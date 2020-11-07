@@ -1,7 +1,7 @@
 import kurentoUtils from "kurento-utils";
 
-function SendVideo(socket,user_id) {
-	const onIceCandidate = function (candidate) {
+function SendVideo(socket,user_id, mediaStream) {
+	const onIceCandidate = (candidate) => {
 		socket.emit('onIceCandidate', {
 			candidate: candidate,
 			user_id: user_id,
@@ -18,6 +18,7 @@ function SendVideo(socket,user_id) {
 		}
 	};
 	var options = {
+		videoStream: mediaStream,
 		localVideo: videoInput,
 		remoteVideo: videoOutput,
 		onicecandidate : onIceCandidate,

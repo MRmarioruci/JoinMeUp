@@ -36,12 +36,15 @@ module.exports = function User(data) {
 		return username;
 	}
 	user.sendVideo = async (data,room) => {
-		const endpoint = await user.generateMedia(room);
+		console.log(`Generating endpoint for user ${user.getId()}`);
+		const endpoint = await user.generateEndpoint(room);
+		console.log(`Processing offer for user ${user.getId()}`);
 		const sdpAnswer = await endpoint.processOffer(data.sdpOffer);
-		websocket.emit('my video', {
+		console.log(`Gathering candidated for user ${user.getId()}`);
+		await endpoint.gatherCandidates();
+		websocket.emit('process answer', {
 			"sdpAnswer": sdpAnswer,
 		});
-		await endpoint.gatherCandidates();
 		return endpoint;
 	}
 	user.connect = function (peer) {
@@ -60,10 +63,11 @@ module.exports = function User(data) {
 	user.getPeerVideo = async (peer, room, sdpOffer) => {
 		await user.connect(peer);
 		await peer.connect(user);
+
 		user.setIncoming(peer.getEndpoint());
 		peer.setIncoming(user.getEndpoint());
 	}
-	user.generateMedia = (room) => {
+	user.generateEndpoint = (room) => {
 		return new Promise( (resolve,reject) => {
 			room.pipeline.create('WebRtcEndpoint', (error, webRtcEndpoint) => {
 				if (error) {
@@ -89,6 +93,6 @@ module.exports = function User(data) {
 		if(outgoingWebRtcEndpoint) outgoingWebRtcEndpoint.addIceCandidate(candidate);
 	}
 	user.disconnect = () => {
-		
+		user.getEndpoint().release();
 	}
 }

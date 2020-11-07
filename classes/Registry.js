@@ -52,6 +52,37 @@ module.exports = function Registry(){
 			return false;
 		}
 	}
+	this.getByWebsocket = (websocket) => {
+		let out = null;
+		for (const key in userRegistry) {
+			if (userRegistry.hasOwnProperty(key)) {
+				const user = userRegistry[key];
+				var w = user.getWebsocket();
+				if(w){
+					if(w.id == websocket){
+						out = user;
+					}
+				}
+			}
+		}
+		return out;
+	}
+	this.getUsersByRoom = (room) => {
+		let out = [];
+		for (const key in userRegistry) {
+			if (userRegistry.hasOwnProperty(key)) {
+				const user = userRegistry[key];
+				var roomName = user.getRoomName();
+				if(roomName){
+					if(roomName == room){
+						out.push(user.getId());
+					}
+				}
+			}
+		}
+		console.log(out);
+		return out;
+	}
 	this.clearData = () => {
 		roomRegistry = {};
 		userRegistry = {};
