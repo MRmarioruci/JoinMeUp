@@ -6,6 +6,7 @@ import selfieImage from '../images/selfie.svg';
 import joinImage from '../images/join.svg';
 import {Link} from 'react-router-dom';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import History from './History';
 
 class UserPage extends Component {
 	constructor(props) {
@@ -91,6 +92,7 @@ class UserPage extends Component {
 					&nbsp;&nbsp;
 					<button className="btn btn-light" onClick={ () => this.showModal('showJoinCallModal')}>Join room</button>
 				</div>
+				<History/>
 				<Modal show={this.state.showStartCallModal} onHide={ () => this.closeModal('showStartCallModal')} size="lg">
 					<Modal.Header closeButton>
 						<Modal.Title></Modal.Title>
