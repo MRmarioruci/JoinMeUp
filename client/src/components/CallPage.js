@@ -5,6 +5,7 @@ import CallControls from './CallControls';
 import Rate from './Rate';
 import SendVideo from './functions/SendVideo';
 import StartCommunication from './functions/StartCommunication';
+import aloneImg from '../images/undraw_Tree_swing_646s.png';
 
 class CallPage extends Component {
 	constructor(props) {
@@ -47,6 +48,7 @@ class CallPage extends Component {
 		})
 		let msg = {
 			'user_id': this.props.user_id,
+			'peer_user_id': this.state.peer_user_id
 		}
 		this.socket.emit('dispose', msg, () =>{})
 	}
@@ -76,6 +78,10 @@ class CallPage extends Component {
 		});
 		this.socket.on('disconnect', (msg) => {
 			console.log(msg);
+		})
+		this.socket.on('peer left', (msg) => {
+			var videoOutput = document.getElementById('videoOutput');
+			videoOutput.srcObject = null;
 		})
 	}
 	getPeerVideoIfNeeded(user_id){
@@ -219,24 +225,15 @@ class CallPage extends Component {
 		})
 	}
 	onCallPage = () => {
-		const videoOutput = {
-			width: '100%',
-			height:'100vh',
-			background:'transparent'
-		}
-		const videoInput = {
-			width: '200px',
-			height:'300px',
-			position: 'absolute',
-			right: '0',
-			background: 'transparent',
-			top: '0',
-		}
 		return (
 			<div>
 				<div className="video__element">
-					<video id="videoInput" style={videoInput}  autoPlay></video>
-					<video id="videoOutput" style={videoOutput} autoPlay></video>
+					<video id="videoInput" className="video__input"  autoPlay></video>
+					<div className="video__text">
+						<img src={aloneImg} className="img-responsive" />
+						<h3>Waiting for participants to join...</h3>
+					</div>
+					<video id="videoOutput" className="video__output" autoPlay></video>
 				</div>
 				<CallControls hangup={this.dispose} />
 			</div>
@@ -249,4 +246,3 @@ class CallPage extends Component {
 	}
 }
 export default CallPage
-		

@@ -7,7 +7,7 @@ module.exports = function User(data) {
 	let websocket = null;
 	let roomName = null;
 	let outgoingWebRtcEndpoint = null;
-	let incomingWebRtcEndpoint = null;
+	let peer = null;
 	user.getId = () => {
 		return id;
 	}
@@ -29,11 +29,11 @@ module.exports = function User(data) {
 	user.setOutgoing = (endpoint) => {
 		outgoingWebRtcEndpoint = endpoint;
 	}
-	user.setIncoming = (endpoint) => {
-		incomingWebRtcEndpoint = endpoint;
+	user.setPeer = (p) => {
+		peer = p;
 	}
-	user.getIncomingWebRtcEndpoint = () => {
-		return incomingWebRtcEndpoint;
+	user.getPeer = () => {
+		return peer;
 	}
 	user.getUsername = () => {
 		return username;
@@ -66,9 +66,8 @@ module.exports = function User(data) {
 	user.getPeerVideo = async (peer, room, sdpOffer) => {
 		await user.connect(peer);
 		await peer.connect(user);
-
-		user.setIncoming(peer.getEndpoint());
-		peer.setIncoming(user.getEndpoint());
+		user.setPeer(peer);
+		peer.setPeer(user);
 	}
 	user.generateEndpoint = (room) => {
 		return new Promise( (resolve,reject) => {
@@ -98,12 +97,15 @@ module.exports = function User(data) {
 	user.disconnect = () => {
 		return new Promise(function (resolve, reject) {
 			if(user.getEndpoint()){
-				user.getEndpoint().disconnect(user.getIncomingWebRtcEndpoint(), function (err) {
+				user.getEndpoint().disconnect(user.getPeer().getEndpoint(), function (err) {
 					if(err){
 						console.log(err);
 						reject(err);
 					}else{
-						user.setIncoming(null);
+						if(user.getPeer()){
+							user.getPeer().getWebsocket().emit('peer left', {'peer_id': user.getId()});
+						}
+						user.setPeer(null);
 						user.setOutgoing(null);
 						console.log('Disconected', user.getUsername());
 						resolve();
