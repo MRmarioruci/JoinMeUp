@@ -28,7 +28,6 @@ class CallPage extends Component {
 		}
 		this.socket = '';
 		this.triedDefaultMedia = false;
-		this.setCallState = this.setCallState.bind(this)
 		this.onCallPage = this.onCallPage.bind(this)
 		this.joinRoom = this.joinRoom.bind(this)
 		this.startSending = this.startSending.bind(this)
@@ -37,11 +36,19 @@ class CallPage extends Component {
 		this._handleMediaError = this._handleMediaError.bind(this)
 		this._getUserMedia = this._getUserMedia.bind(this)
 		this.listDevices = this.listDevices.bind(this)
+		this.getPeerVideoIfNeeded = this.getPeerVideoIfNeeded.bind(this)
+		this.dispose = this.dispose.bind(this)
 	}
-	setCallState = (newState) => {
+	dispose = () => {
+		if(this.state.rtcPeer) this.state.rtcPeer.dispose();
 		this.setState({
-			onCall:newState
+			rtcPeer: '',
+			onCall: false
 		})
+		let msg = {
+			'user_id': this.props.user_id,
+		}
+		this.socket.emit('dispose', msg, () =>{})
 	}
 	componentDidMount(){
 		this.socket = socketClient('http://localhost:5000');
@@ -215,13 +222,14 @@ class CallPage extends Component {
 		const videoOutput = {
 			width: '100%',
 			height:'100vh',
-			background:'#000'
+			background:'transparent'
 		}
 		const videoInput = {
 			width: '200px',
 			height:'300px',
 			position: 'absolute',
 			right: '0',
+			background: 'transparent',
 			top: '0',
 		}
 		return (
@@ -230,13 +238,13 @@ class CallPage extends Component {
 					<video id="videoInput" style={videoInput}  autoPlay></video>
 					<video id="videoOutput" style={videoOutput} autoPlay></video>
 				</div>
-				<CallControls hangup={this.setCallState} />
+				<CallControls hangup={this.dispose} />
 			</div>
 		)
 	}
 	render() {
 		return (
-			<div> { this.state.onCall ? this.onCallPage() : <Rate startSending={this.startSending} />	} </div>
+			<div> { this.state.onCall ? this.onCallPage() : <Rate startSending={this._getUserMedia} />	} </div>
 		)
 	}
 }

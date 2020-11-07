@@ -80,7 +80,6 @@ module.exports = function Registry(){
 				}
 			}
 		}
-		console.log(out);
 		return out;
 	}
 	this.clearData = () => {

@@ -63,18 +63,32 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 	})
 	socket.on('onIceCandidate', (msg,cb) => {
 		const user = Registry.getUser(msg.user_id);
-		if(user){
+		if(user && user.getEndpoint()){
 			user.onIceCandidate(msg.candidate);
 		}
 	})
-	socket.on('disconnect', () => {
+	socket.on('dispose',async (msg, cb) => {
+		const user = Registry.getUser(msg.user_id);
+		if(!user){
+			console.log(`User ${msg.user_id} is not registered`);
+			if(cb) cb(false);
+		}else{
+			const room = Registry.getRoom( user.getRoomName() );
+			if(room){
+				room.decreaseCounter();
+			}
+			await user.disconnect();
+			console.log(`User ${msg.user_id} left room ${room.name}`);
+		}
+	})
+	socket.on('disconnect',async () => {
 		const user = Registry.getByWebsocket(socket);
 		if(user){
 			const room = Registry.getRoom( user.getRoomName() );
 			if(room){
 				room.decreaseCounter();
 			}
-			user.disconnect();
+			await user.disconnect();
 			Registry.deleteUser(user.getId());
 		}
 	})
@@ -85,7 +99,6 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 				room.increaseCounter();
 				user.setRoomName(room.name);
 			}
-			console.log(`${room.name} has ${room.userCount} participants`);
 		});
 		return loggedUsers;
 	}

@@ -32,6 +32,9 @@ module.exports = function User(data) {
 	user.setIncoming = (endpoint) => {
 		incomingWebRtcEndpoint = endpoint;
 	}
+	user.getIncomingWebRtcEndpoint = () => {
+		return incomingWebRtcEndpoint;
+	}
 	user.getUsername = () => {
 		return username;
 	}
@@ -93,6 +96,21 @@ module.exports = function User(data) {
 		if(outgoingWebRtcEndpoint) outgoingWebRtcEndpoint.addIceCandidate(candidate);
 	}
 	user.disconnect = () => {
-		user.getEndpoint().release();
+		return new Promise(function (resolve, reject) {
+			if(user.getEndpoint()){
+				user.getEndpoint().disconnect(user.getIncomingWebRtcEndpoint(), function (err) {
+					if(err){
+						console.log(err);
+						reject(err);
+					}else{
+						user.setIncoming(null);
+						user.setOutgoing(null);
+						console.log('Disconected', user.getUsername());
+						resolve();
+					}
+				})
+				user.getEndpoint().release();
+			}
+		})
 	}
 }

@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import '../css/call.css'
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 
 function CallControls(props) {
+	const [hasAudio, setAudio] = useState(true);
+	const [hasVideo, setVideo] = useState(true);
 	useEffect(() => {
 		tippy('[data-tippy-content]');
 	}, [])
