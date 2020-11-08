@@ -8,6 +8,16 @@ module.exports = function User(data) {
 	let roomName = null;
 	let outgoingWebRtcEndpoint = null;
 	let peer = null;
+	let hasVideo = true;
+	let hasAudio = true;
+	user.getInfo = () => {
+		return {
+			'id': id,
+			'username': username,
+			'hasVideo': hasVideo,
+			'hasAudio': hasAudio
+		};
+	}
 	user.getId = () => {
 		return id;
 	}
@@ -114,5 +124,13 @@ module.exports = function User(data) {
 				user.getEndpoint().release();
 			}
 		})
+	}
+	user.editMedia = (type, value) => {
+		if(type === 'video'){
+			hasVideo = value;
+		}else{
+			hasAudio = value;
+		}
+		user.getPeer().getWebsocket().emit('peer edited media', user.getInfo())
 	}
 }

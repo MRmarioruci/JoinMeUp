@@ -75,7 +75,7 @@ module.exports = function Registry(){
 				var roomName = user.getRoomName();
 				if(roomName){
 					if(roomName == room){
-						out.push(user.getId());
+						out.push(user.getInfo());
 					}
 				}
 			}

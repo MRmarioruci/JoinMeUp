@@ -92,6 +92,16 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 			Registry.deleteUser(user.getId());
 		}
 	})
+	socket.on('edit media',(msg, cb) => {
+		const user = Registry.getUser(msg.user_id);
+		if(!user){
+			console.log(`User ${msg.user_id} is not registered`);
+			if(cb) cb(false);
+		}else{
+			user.editMedia(msg.type, msg.value);
+			if(cb) cb(true);
+		}
+	})
 	function join(room, user){
 		let loggedUsers = Registry.getUsersByRoom(room.name);
 		socket.join(room.name, () => {

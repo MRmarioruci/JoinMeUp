@@ -16,7 +16,6 @@ class CallPage extends Component {
 			joinedRoom: false,
 			rtcPeer:'',
 			peer_user_id: '',
-			socket: '',
 			hasAudio: true,
 			hasMicrophone: true,
 			hasVideo: true,
@@ -26,6 +25,7 @@ class CallPage extends Component {
 			availableVideoDevices : [],
 			selectedAudioSource: '',
 			selectedVideoSource: '',
+			peerInfo: {},
 		}
 		this.socket = '';
 		this.triedDefaultMedia = false;
@@ -39,6 +39,7 @@ class CallPage extends Component {
 		this.listDevices = this.listDevices.bind(this)
 		this.getPeerVideoIfNeeded = this.getPeerVideoIfNeeded.bind(this)
 		this.dispose = this.dispose.bind(this)
+		this.setPeerInfo = this.setPeerInfo.bind(this)
 	}
 	dispose = () => {
 		if(this.state.rtcPeer) this.state.rtcPeer.dispose();
@@ -83,6 +84,9 @@ class CallPage extends Component {
 			var videoOutput = document.getElementById('videoOutput');
 			videoOutput.srcObject = null;
 		})
+		this.socket.on('peer edited media', (msg) => {
+			this.setPeerInfo(msg);
+		})
 	}
 	getPeerVideoIfNeeded(user_id){
 		if(user_id != this.props.user_id){
@@ -94,6 +98,13 @@ class CallPage extends Component {
 			})
 		}
 	}
+	setPeerInfo = (info) => {
+		console.log(info);
+		this.setState({
+			peerInfo: info
+		})
+		console.log(this.state.peerInfo);
+	}
 	joinRoom = () => {
 		let msg = {
 			'user_id': this.props.user_id,
@@ -103,7 +114,8 @@ class CallPage extends Component {
 			if(data){
 				this._getUserMedia();
 				data.logged.map( user => {
-					if(user !== this.state.user_id){
+					if(user.id !== this.state.user_id){
+						this.setPeerInfo(user);
 						this.getPeerVideoIfNeeded(user);
 					}
 				})
@@ -234,8 +246,24 @@ class CallPage extends Component {
 						<h3>Waiting for participants to join...</h3>
 					</div>
 					<video id="videoOutput" className="video__output" autoPlay></video>
+					{
+						this.state.peerInfo &&
+						<div className="peer__info">
+							<span>{this.state.peerInfo.username}</span>
+							&nbsp;
+							<div className="vertical__bar"></div>
+							&nbsp;
+							<span>
+								{this.state.peerInfo.hasAudio ? <i className="fas fa-microphone-alt"></i> : <i className="fas fa-microphone-alt-slash"></i>}
+							</span>
+							&nbsp;
+							<span>
+								{this.state.peerInfo.hasVideo ? <i className="fas fa-video"></i> : <i className="fas fa-video-slash"></i>}
+							</span>
+						</div>
+					}
 				</div>
-				<CallControls hangup={this.dispose} />
+				<CallControls hangup={this.dispose} socket={this.socket} user_id={this.props.user_id} />
 			</div>
 		)
 	}
