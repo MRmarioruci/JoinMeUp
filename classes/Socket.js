@@ -1,4 +1,6 @@
-module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
+const User_Model = require("../models/User_Model");
+
+module.exports = function SocketHandler(io, socket, Registry, kurentoClient, CONNECTION){
 	let sk = this;
 	socket.on('join room',async (msg,cb) => {
 		const user = Registry.getUser(msg.user_id);
@@ -23,7 +25,7 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 				console.log('room does not exist');
 				console.log('Adding user ',user.getUsername(),' to room', msg.room);
 				console.log('Registering room', msg.room);
-				let room = await Registry.addRoom(kurentoClient, msg.room);
+				let room = await Registry.addRoom(kurentoClient, msg.room, user.getId(), CONNECTION).catch( () => {});
 				if(room){
 					cb(null, {logged: join(room, user) });
 				}
@@ -104,10 +106,13 @@ module.exports = function SocketHandler(io, socket, Registry, kurentoClient){
 	})
 	function join(room, user){
 		let loggedUsers = Registry.getUsersByRoom(room.name);
-		socket.join(room.name, () => {
+		socket.join(room.name, async () => {
 			if(user.getRoomName() != room.name){
 				room.increaseCounter();
 				user.setRoomName(room.name);
+				await User_Model.addUserToRoom(room.db_id, user.getId(), CONNECTION).catch( (err) => {
+					console.log(err);
+				})
 			}
 		});
 		return loggedUsers;

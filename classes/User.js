@@ -41,6 +41,7 @@ module.exports = function User(data) {
 	}
 	user.setPeer = (p) => {
 		peer = p;
+		user.getWebsocket().emit('started communication', peer ? peer.getInfo() : null)
 	}
 	user.getPeer = () => {
 		return peer;
@@ -106,7 +107,7 @@ module.exports = function User(data) {
 	}
 	user.disconnect = () => {
 		return new Promise(function (resolve, reject) {
-			if(user.getEndpoint()){
+			if(user.getEndpoint() && user.getPeer()){
 				user.getEndpoint().disconnect(user.getPeer().getEndpoint(), function (err) {
 					if(err){
 						console.log(err);

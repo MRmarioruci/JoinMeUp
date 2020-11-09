@@ -1,5 +1,6 @@
 const User = require('./User');
 const Room = require('./Room');
+const Room_Model = require('../models/Room_Model');
 
 module.exports = function Registry(){
 	const userRegistry = {};
@@ -37,12 +38,18 @@ module.exports = function Registry(){
 			console.log('user does not exist');
 		}
 	}
-	this.addRoom = async (kurentoClient,room) => {
+	this.addRoom = async (kurentoClient, room, user_id, CONNECTION) => {
 		if(!roomRegistry[room]){
-			const new_room = new Room(room);
-			roomRegistry[room] =  new_room;
-			const pipeline = await new_room.createPipeline(kurentoClient);
-			return new_room;
+			const room_db_id = await Room_Model.addRoom(room, user_id, CONNECTION).catch( () => {})
+			console.log(room_db_id);
+			if(room_db_id){
+				const new_room = new Room(room, room_db_id);
+				roomRegistry[room] =  new_room;
+				const pipeline = await new_room.createPipeline(kurentoClient);
+				return new_room;
+			}else{
+				return false;
+			}
 		}
 	}
 	this.getRoom = (room) => {

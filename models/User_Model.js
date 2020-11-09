@@ -60,5 +60,19 @@ module.exports = {
 				}
 			})
 		})
-	}
+	},
+	addUserToRoom: (room_id, user_id, CONNECTION) => {
+		return new Promise((resolve, reject) => {
+			const q = 'INSERT INTO `User_Joined_Room`(`room_id`, `user_id`, `joinTime`) VALUES(?, ?, NOW()) ON DUPLICATE KEY UPDATE `joinTime` = NOW()';
+			console.log(room_id, user_id);
+			CONNECTION.query(q, [room_id, user_id ], (err, res) => {
+				if(err){
+					reject(`Could not add user ${user_id} to room ${room_id} in db`);
+				}else{
+					console.log(`User ${user_id} added to room ${room_id} in db`)
+					resolve(true);
+				}
+			})
+		})
+	},
 }

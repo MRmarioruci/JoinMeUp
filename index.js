@@ -63,7 +63,7 @@ const getKurento = () => {
 io.on('connection', (socket) => {
 	getKurento()
 	.then(async (kurentoClient) => {
-		new SocketHandler(io, socket, Registry, kurentoClient);
+		new SocketHandler(io, socket, Registry, kurentoClient, CONNECTION);
 	})
 })
 process.on('SIGTERM', function () {

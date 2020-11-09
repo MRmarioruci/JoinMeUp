@@ -6,6 +6,7 @@ import Rate from './Rate';
 import SendVideo from './functions/SendVideo';
 import StartCommunication from './functions/StartCommunication';
 import aloneImg from '../images/undraw_Tree_swing_646s.png';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 class CallPage extends Component {
 	constructor(props) {
@@ -26,6 +27,7 @@ class CallPage extends Component {
 			selectedAudioSource: '',
 			selectedVideoSource: '',
 			peerInfo: false,
+			linkCopied: false,
 		}
 		this.socket = '';
 		this.peerMediaStream = null;
@@ -41,6 +43,7 @@ class CallPage extends Component {
 		this.getPeerVideoIfNeeded = this.getPeerVideoIfNeeded.bind(this)
 		this.dispose = this.dispose.bind(this)
 		this.setPeerInfo = this.setPeerInfo.bind(this)
+		this.link = window.location.host + '/call/' + this.props.match.params.id;
 	}
 	dispose = () => {
 		if(this.state.rtcPeer) this.state.rtcPeer.dispose();
@@ -76,7 +79,7 @@ class CallPage extends Component {
 			this.getPeerVideoIfNeeded(msg.user_id);
 		});
 		this.socket.on('started communication', (msg) => {
-			console.log(msg);
+			this.setPeerInfo(msg);
 		});
 		this.socket.on('disconnect', (msg) => {
 			console.log(msg);
@@ -86,6 +89,7 @@ class CallPage extends Component {
 			this.peerMediaStream = video.srcObject.clone();
 			video.srcObject = null;
 			video.srcObject = this.peerMediaStream;
+			this.setPeerInfo(null);
 		})
 		this.socket.on('peer edited media', (msg) => {
 			this.setPeerInfo(msg);
@@ -102,11 +106,9 @@ class CallPage extends Component {
 		}
 	}
 	setPeerInfo = (info) => {
-		console.log(info);
 		this.setState({
 			peerInfo: info
 		})
-		console.log(this.state.peerInfo);
 	}
 	joinRoom = () => {
 		let msg = {
@@ -244,10 +246,22 @@ class CallPage extends Component {
 			<div>
 				<div className="video__element">
 					<video id="videoInput" className="video__input"  autoPlay></video>
-					<div className="video__text">
-						<img src={aloneImg} className="img-responsive" />
-						<h3>Waiting for participants to join...</h3>
-					</div>
+					{
+						!this.state.peerInfo &&
+						<div className="video__text">
+							<img src={aloneImg} className="img-responsive" />
+							<h3>Waiting for participants to join...</h3>
+							<div className="copy__clip">
+								{this.link} &nbsp;
+								<CopyToClipboard text={this.link} onCopy={ () => { this.setState({linkCopied:true} )}}>
+									<button className="btn btn-success" title="Copy to clipboard">
+										<i className="far fa-clipboard"></i>&nbsp;
+										{this.state.linkCopied ? <span> Copied!</span> : <span> Copy</span>}
+									</button>
+								</CopyToClipboard>
+							</div>
+						</div>
+					}
 					<video id="videoOutput" className="video__output" autoPlay></video>
 					{
 						this.state.peerInfo &&

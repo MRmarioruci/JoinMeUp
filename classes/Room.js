@@ -1,8 +1,9 @@
 const { v4: uuidv4 } = require('uuid');
-module.exports = function Room(name){
+module.exports = function Room(name, db_id){
 	let room = this;
 	room.name = name;
 	room.id = uuidv4();
+	room.db_id = db_id;
 	room.pipeline = null;
 	room.userCount = 0;
 	room.createPipeline = (kurentoClient) => {
