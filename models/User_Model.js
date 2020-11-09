@@ -75,4 +75,29 @@ module.exports = {
 			})
 		})
 	},
+	getHistory: (user_id, CONNECTION) => {
+		return new Promise((resolve, reject) => {
+			const q = 'SELECT \
+			`Rooms`.`id`, \
+			`Rooms`.`name`, \
+			`Users`.`id`\
+			FROM `User_Joined_Room`\
+			JOIN `Rooms` ON `User_Joined_Room`.`room_id` = `Rooms`.`id`\
+			JOIN `Users` ON `Users`.`id` = `User_Joined_Room`.`user_id`\
+			WHERE `Users`.`id` = ? \
+			GROUP BY `Rooms`.`id`';
+			CONNECTION.query(q, [user_id], (err, res) => {
+				if(err){
+					console.log(`Could not get history`);
+					reject('err');
+				}else{
+					if(res.length > 0){
+						resolve(res);
+					}else{
+						resolve([]);
+					}
+				}
+			})
+		})
+	},
 }

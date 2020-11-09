@@ -85,4 +85,24 @@ module.exports = function Router(app, Registry, CONNECTION){
 		}
 		res.json(o);
 	});
+	app.post('/getHistory',async (req,res) => {
+		let {session} = req;
+		if(!session.username && !session.user_id) return res.json({'status':'err','data':'not logged'});
+		const user = Registry.getUser(session.user_id);
+		let o = {
+			'status': 'err',
+			'data': null
+		};
+		if(user){
+			const history = await User_Model.getHistory(session.user_id, CONNECTION).catch( (err) => {});
+			if(history){
+				o.status = 'ok';
+				o.data = history;
+			}
+		}else{
+			console.log(`User ${user.getId()} does not exist`);
+			o.data = 'does not exist';
+		}
+		res.json(o);
+	});
 }

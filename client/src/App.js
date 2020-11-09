@@ -35,7 +35,6 @@ class App extends Component {
 				this.updateAppState(data.username,data.user_id);
 			}else{
 				this.updateAppState('','');
-				/* this.props.history.push('/'); */
 			}
 		}
 	}
@@ -56,12 +55,12 @@ class App extends Component {
 		if(status == 'ok'){
 			if(data){
 				this.updateAppState(data.username,data.user_id);
-				/* this.props.history.push('/'); */
+				window.location.href = "/";
 			}
 		}else{
 			if(data == 'not logged'){
 				this.checkIfLoggedIn();
-				/* this.props.history.push('/'); */
+				window.location.href = "/";
 			}else{
 				this.checkIfLoggedIn();
 			}

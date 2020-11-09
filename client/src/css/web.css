@@ -50,3 +50,8 @@
 .label__link{
 	color: #007bff;
 }
+@media only screen and (max-width: 850px) {
+  .web__right{
+	  width: 100%;
+  }
+}
