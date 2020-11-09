@@ -67,14 +67,21 @@
 	z-index: 20;
 	overflow: hidden;
 	border-radius: 10px;
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
+}
+.video__element{
+	background: transparent;
 }
 .video__output{
 	width: 100%;
 	height: 100vh;
-	background: #000;
+	background: transparent;
 	position: absolute;
 	z-index: 10 !important;
 	left : 0;
+	-webkit-transform: scaleX(-1);
+	transform: scaleX(-1);
 }
 .video__text{
 	position: absolute;

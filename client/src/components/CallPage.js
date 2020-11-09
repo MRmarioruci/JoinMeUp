@@ -25,9 +25,10 @@ class CallPage extends Component {
 			availableVideoDevices : [],
 			selectedAudioSource: '',
 			selectedVideoSource: '',
-			peerInfo: {},
+			peerInfo: false,
 		}
 		this.socket = '';
+		this.peerMediaStream = null;
 		this.triedDefaultMedia = false;
 		this.onCallPage = this.onCallPage.bind(this)
 		this.joinRoom = this.joinRoom.bind(this)
@@ -81,8 +82,10 @@ class CallPage extends Component {
 			console.log(msg);
 		})
 		this.socket.on('peer left', (msg) => {
-			var videoOutput = document.getElementById('videoOutput');
-			videoOutput.srcObject = null;
+			var video = document.getElementById('videoOutput');
+			this.peerMediaStream = video.srcObject.clone();
+			video.srcObject = null;
+			video.srcObject = this.peerMediaStream;
 		})
 		this.socket.on('peer edited media', (msg) => {
 			this.setPeerInfo(msg);

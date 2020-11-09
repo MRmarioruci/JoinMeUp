@@ -1,6 +1,6 @@
 import kurentoUtils from "kurento-utils";
 
-function SendVideo(socket,user_id, mediaStream) {
+function SendVideo(socket, user_id, mediaStream) {
 	const onIceCandidate = (candidate) => {
 		socket.emit('onIceCandidate', {
 			candidate: candidate,
@@ -29,6 +29,16 @@ function SendVideo(socket,user_id, mediaStream) {
 			fail = error
 			return error;
 		}
+		/* let connectionStateCount = 0;
+		let int = setInterval(function(){
+			if((rtcPeer.peerConnection.iceConnectionState == 'connected')){
+				clearInterval(int);
+				setTimeout(function(){
+					videoOutput.srcObject = rtcPeer.getRemoteStream().clone();
+				},1000);
+			}
+			connectionStateCount++;
+		}, 500); */
 		this.generateOffer( (error, sdpOffer) => {
 			if (error){
 				fail = error;
