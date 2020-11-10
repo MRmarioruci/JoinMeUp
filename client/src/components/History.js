@@ -22,6 +22,32 @@ function History() {
 			}
 		}
 	}
+	const deleteHistory = async (room_id) => {
+		let o = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({'room_id': room_id})
+		};
+		const response = await fetch('/deleteHistory', o);
+		const {status,data} = await response.json();
+		if(status === 'ok'){
+			if(data){
+				let tmpArray = [...rooms];
+				let i = null;
+				tmpArray.forEach( (room, index) => {
+					if(room.room_id === room_id){
+						i = index;
+					}
+				})
+				if(i !== null){
+					tmpArray.splice(i, 1);
+					setRoom(tmpArray);
+				}
+			}else{
+				console.log('History deletion error');
+			}
+		}
+	}
 	return (
 		<div className="history__section">
 			<h3>
@@ -54,7 +80,7 @@ function History() {
 											</CopyToClipboard>
 										</th>
 										<th className="fnt17">
-											<button className="btn btn-danger">
+											<button className="btn btn-danger" onClick={ () => deleteHistory(room.room_id) }>
 												<i className="fas fa-trash"></i>&nbsp;
 												Delete
 											</button>

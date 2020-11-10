@@ -100,7 +100,27 @@ module.exports = function Router(app, Registry, CONNECTION){
 				o.data = history;
 			}
 		}else{
-			console.log(`User ${user.getId()} does not exist`);
+			console.log(`User ${session.user_id} does not exist`);
+			o.data = 'does not exist';
+		}
+		res.json(o);
+	});
+	app.post('/deleteHistory',async (req,res) => {
+		let {session} = req;
+		if(!session.username && !session.user_id) return res.json({'status':'err','data':'not logged'});
+		const user = Registry.getUser(session.user_id);
+		let o = {
+			'status': 'err',
+			'data': null
+		};
+		if(user){
+			const deleted = await User_Model.deleteHistory(session.user_id, req.body.room_id, CONNECTION).catch( (err) => {});
+			if(deleted){
+				o.status = 'ok';
+				o.data = deleted;
+			}
+		}else{
+			console.log(`User ${session.user_id} does not exist`);
 			o.data = 'does not exist';
 		}
 		res.json(o);

@@ -78,7 +78,7 @@ module.exports = {
 	getHistory: (user_id, CONNECTION) => {
 		return new Promise((resolve, reject) => {
 			const q = 'SELECT \
-			`Rooms`.`id`, \
+			`Rooms`.`id` AS `room_id`, \
 			`Rooms`.`name`, \
 			`Users`.`id`\
 			FROM `User_Joined_Room`\
@@ -96,6 +96,23 @@ module.exports = {
 					}else{
 						resolve([]);
 					}
+				}
+			})
+		})
+	},
+	deleteHistory: (user_id, room_id, CONNECTION) => {
+		return new Promise((resolve, reject) => {
+			const qD = 'DELETE FROM `User_Joined_Room` WHERE `User_Joined_Room`.`room_id` = ? AND `User_Joined_Room`.`user_id` = ?';
+			CONNECTION.query( qD, [room_id, user_id], (e, r) => {
+				if(e){
+					console.log(`Could not delete history`);
+					reject(null);
+				}else{
+					/*Delete room if the user is the creator  */
+					const qDR = 'DELETE FROM `Rooms` WHERE `Rooms`.`id` = ? AND `Rooms`.`user_id` = ?';
+					CONNECTION.query( qDR, [room_id, user_id], (e, r) => {
+						resolve(true);
+					})
 				}
 			})
 		})
