@@ -286,7 +286,7 @@ class CallPage extends Component {
 	}
 	render() {
 		return (
-			<div> { this.state.onCall ? this.onCallPage() : <Rate startSending={this._getUserMedia} />	} </div>
+			<div> { this.state.onCall ? this.onCallPage() : <Rate room_id={this.props.match.params.id} startSending={this._getUserMedia} />	} </div>
 		)
 	}
 }

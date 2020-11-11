@@ -5,9 +5,21 @@ import {Link} from 'react-router-dom';
 
 function Rate(props) {
 	const [submitted, setSubmit] = useState(false)
-	const submitRating = (value) => {
-		console.log('TBI save rating');
-		setSubmit(true)
+	const submitRating = async(value) => {
+		let o = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({'room_id': props.room_id, 'value': value})
+		};
+		const response = await fetch('/rateCall', o);
+		const {status,data} = await response.json();
+		if(status === 'ok'){
+			if(data){
+				setSubmit(true);
+			}else{
+				console.log('History deletion error');
+			}
+		}
 	}
 	return (
 		<div>

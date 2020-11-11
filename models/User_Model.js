@@ -117,4 +117,18 @@ module.exports = {
 			})
 		})
 	},
+	rateCall: (user_id, room_id, value, CONNECTION) => {
+		return new Promise((resolve, reject) => {
+			const q = 'INSERT INTO `UserRatings`( `user_id`, `room_id`, `rating`) VALUES(?,?,?)';
+			CONNECTION.query(q, [ user_id, room_id, value ], (err, res) => {
+				if(err){
+					console.log(`Could not add user's ${user_id} rating in db`, err);
+					reject('err');
+				}else{
+					console.log(`User's ${user_id} rating added in db`)
+					resolve(true);
+				}
+			})
+		})
+	},
 }

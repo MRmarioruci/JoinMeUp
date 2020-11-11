@@ -125,4 +125,25 @@ module.exports = function Router(app, Registry, CONNECTION){
 		}
 		res.json(o);
 	});
+	app.post('/rateCall',async (req,res) => {
+		let {session} = req;
+		if(!session.username && !session.user_id) return res.json({'status':'err','data':'not logged'});
+		const user = Registry.getUser(session.user_id);
+		let o = {
+			'status': 'err',
+			'data': null
+		};
+		if(user){
+			let room = Registry.getRoom( user.getRoomName() );
+			const rated = await User_Model.rateCall(session.user_id, room.db_id, req.body.value, CONNECTION).catch( (err) => {});
+			if(rated){
+				o.status = 'ok';
+				o.data = rated;
+			}
+		}else{
+			console.log(`User ${session.user_id} does not exist`);
+			o.data = 'does not exist';
+		}
+		res.json(o);
+	});
 }
