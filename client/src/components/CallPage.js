@@ -167,8 +167,9 @@ class CallPage extends Component {
 				for (let i = 0; i !== devices.length; ++i) {
 					const deviceInfo = devices[i];
 					if (deviceInfo.kind === 'audioinput') {
+						console.log(deviceInfo);
 						self.setState({
-							availableVideoDevices: [...self.state.availableAudioDevices, deviceInfo],
+							availableAudioDevices: [...self.state.availableAudioDevices, deviceInfo],
 							hasMicrophone: true
 						})
 					} else if (deviceInfo.kind === 'videoinput') {
@@ -280,7 +281,7 @@ class CallPage extends Component {
 						</div>
 					}
 				</div>
-				<CallControls hangup={this.dispose} socket={this.socket} user_id={this.props.user_id} />
+				<CallControls hangup={this.dispose} socket={this.socket} user_id={this.props.user_id} availableAudioDevices={this.state.availableAudioDevices} availableVideoDevices={this.state.availableVideoDevices}/>
 			</div>
 		)
 	}

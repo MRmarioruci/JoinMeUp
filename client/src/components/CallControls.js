@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import {Dropdown, DropdownButton} from 'react-bootstrap';
 import '../css/call.css'
 import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
@@ -51,16 +52,48 @@ function CallControls(props) {
 	}, [])
 	return (
 		<div className="call__controls">
-			<button id="microphone" onClick={() => editAudio() } className="btn btn-light btn-round zoom__on-hover" data-tippy-content="Toggle microphone">
+			<button id="microphone" onClick={() => editAudio() } className="btn btn-light btn-round zoom__on-hover call__control">
 				{hasAudio ? <i className="fas fa-microphone-alt"></i> : <i className="fas fa-microphone-alt-slash"></i>}
+				<div className="dropup">
+					<div className="call__settings">
+						<i className="fas fa-chevron-up"></i>
+					</div>
+					<div className="dropup-content text-left">
+						<span className="ml5">
+							Audio Source
+						</span>
+						<div>
+						{
+							props.availableAudioDevices.map( (device, index) => {
+								return <a key={index}> { device.label } </a>
+							})
+						}
+						</div>
+					</div>
+				</div>
 			</button>
 			&nbsp;
-			<button onClick={() => { props.hangup(false) }} className="btn btn-danger btn-round zoom__on-hover" data-tippy-content="Hang up">
+			<button onClick={() => { props.hangup(false) }} className="btn btn-danger btn-round zoom__on-hover call__control call__control-hang" data-tippy-content="Hang up">
 				<i className="fas fa-phone-slash"></i>
 			</button>
 			&nbsp;
-			<button className="btn btn-light btn-round zoom__on-hover"  onClick={() => editVideo() } data-tippy-content="Toggle video">
+			<button className="btn btn-light btn-round zoom__on-hover call__control"  onClick={() => editVideo() }>
 				{hasVideo ? <i className="fas fa-video"></i> : <i className="fas fa-video-slash"></i>}
+				<div className="dropup">
+					<div className="call__settings">
+						<i className="fas fa-chevron-up"></i>
+					</div>
+					<div className="dropup-content text-left">
+						Video Source
+						<div>
+						{
+							props.availableVideoDevices.map( (device, index) => {
+								return <a key={index}> { device.label } </a>
+							})
+						}
+						</div>
+					</div>
+				</div>
 			</button>
 		</div>
 	)
