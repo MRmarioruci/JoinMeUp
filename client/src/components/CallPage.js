@@ -119,7 +119,7 @@ class CallPage extends Component {
 			if(data){
 				this._getUserMedia();
 				data.logged.map( user => {
-					if(user.id !== this.state.user_id){
+					if(user.id !== this.props.user_id){
 						this.setPeerInfo(user);
 						this.getPeerVideoIfNeeded(user);
 					}

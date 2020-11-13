@@ -132,6 +132,9 @@ module.exports = function User(data) {
 		}else{
 			hasAudio = value;
 		}
-		user.getPeer().getWebsocket().emit('peer edited media', user.getInfo())
+		let peer = user.getPeer();
+		if(peer){
+			peer.getWebsocket().emit('peer edited media', user.getInfo());
+		}
 	}
 }

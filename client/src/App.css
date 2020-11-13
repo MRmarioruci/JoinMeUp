@@ -46,7 +46,7 @@
 	margin-bottom:50px;
 	display: block;
 	background-color: transparent;
-	z-index: 100;
+	z-index: 10000;
 	position: relative;
 }
 .logo__contain{

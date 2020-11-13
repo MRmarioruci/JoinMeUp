@@ -37,3 +37,6 @@ a:hover{
 .modal-footer{
 	border-top: none;
 }
+.modal{
+	z-index: 30000 !important;
+}

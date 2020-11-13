@@ -87,7 +87,7 @@
 }
 .video__text{
 	position: absolute;
-	top : 35vh;
+	top : 10vh;
 	margin: auto;
 	width: 100%;
 	text-align: center;
@@ -134,7 +134,7 @@
 	width:25px;
 	height: 25px;
 	border-radius: 50%;
-	z-index: 100;
+	z-index: 200;
 }
 .call__control{
 	position: relative;
@@ -152,7 +152,7 @@
 .dropup-content {
 	display: none;
 	position: absolute;
-	background-color: #fff;
+	background: #fff;
 	min-width: 300px;
 	bottom: 20px;
 	z-index: 9999;
