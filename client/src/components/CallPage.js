@@ -131,13 +131,13 @@ class CallPage extends Component {
 		this.setState({
 			selectedAudioDevice: source
 		})
-		this.startSending();
+		this._getUserMedia();
 	}
 	_changeVideoSource = (source) => {
 		this.setState({
 			selectedVideoDevice: source
 		})
-		this.startSending();
+		this._getUserMedia();
 	}
 	_handleMediaError = (error) => {
 		if(error){
@@ -154,7 +154,6 @@ class CallPage extends Component {
 	listDevices = function(cb){
 		let self = this;
 		if(!navigator.mediaDevices){
-			//Notifications.notify('We can only get your media in an https enviroment',7000,'error','toast-bottom-left');
 			cb(false);
 			return false;
 		}
@@ -167,7 +166,6 @@ class CallPage extends Component {
 				for (let i = 0; i !== devices.length; ++i) {
 					const deviceInfo = devices[i];
 					if (deviceInfo.kind === 'audioinput') {
-						console.log(deviceInfo);
 						self.setState({
 							availableAudioDevices: [...self.state.availableAudioDevices, deviceInfo],
 							hasMicrophone: true
@@ -182,6 +180,16 @@ class CallPage extends Component {
 					} else {
 						console.log('Some other kind of source/device: ', deviceInfo);
 					}
+				}
+				if(!self.state.selectedAudioDevice){
+					self.setState({
+						selectedAudioDevice: self.state.availableAudioDevices[0],
+					})
+				}
+				if(!self.state.selectedVideoDevice){
+					self.setState({
+						selectedVideoDevice: self.state.availableVideoDevices[0],
+					})
 				}
 			}
 			if(cb){
@@ -281,7 +289,16 @@ class CallPage extends Component {
 						</div>
 					}
 				</div>
-				<CallControls hangup={this.dispose} socket={this.socket} user_id={this.props.user_id} availableAudioDevices={this.state.availableAudioDevices} availableVideoDevices={this.state.availableVideoDevices}/>
+				<CallControls hangup={this.dispose}
+					socket={this.socket}
+					user_id={this.props.user_id}
+					availableAudioDevices={this.state.availableAudioDevices}
+					availableVideoDevices={this.state.availableVideoDevices}
+					selectedAudioDevice={this.state.selectedAudioDevice}
+					selectedVideoDevice={this.state.selectedVideoDevice}
+					changeAudioSource={this._changeAudioSource}
+					changeVideoSource={this._changeVideoSource}
+				/>
 			</div>
 		)
 	}

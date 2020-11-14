@@ -49,6 +49,38 @@ function CallControls(props) {
 			'user_id': props.user_id
 		}, function(d){});
 	}
+	const listVideoDevices = () => {
+		let selectedId = props.selectedVideoDevice ? props.selectedVideoDevice.deviceId : -1;
+		return (
+			props.availableVideoDevices.map( (device, index) => {
+				return (
+					<div key={index}>
+						<a onClick={() => { props.changeVideoSource(device) }}>
+							{device.deviceId == selectedId && <i className="fas fa-check text-success"></i>}
+							&nbsp;
+							{device.label}
+						</a>
+					</div>
+				)
+			})
+		)
+	}
+	const listAudioDevices = () => {
+		let selectedId = props.selectedAudioDevice ? props.selectedAudioDevice.deviceId : -1;
+		return (
+			props.availableAudioDevices.map( (device, index) => {
+				return (
+					<div key={index}>
+						<a onClick={() => { props.changeAudioSource(device) }}>
+							{device.deviceId == selectedId && <i className="fas fa-check text-success"></i>}
+							&nbsp;
+							{device.label}
+						</a>
+					</div>
+				)
+			})
+		)
+	}
 	useEffect(() => {
 		tippy('[data-tippy-content]');
 	}, [])
@@ -59,21 +91,6 @@ function CallControls(props) {
 			</button>
 			<button className="btn btn-light btn-round zoom__on-hover call__control"  onClick={() => editVideo() }>
 				{hasVideo ? <i className="fas fa-video"></i> : <i className="fas fa-video-slash"></i>}
-			{/* 	<div className="dropup">
-					<div className="call__settings">
-						<i className="fas fa-chevron-up"></i>
-					</div>
-					<div className="dropup-content text-left">
-						Video Source
-						<div>
-						{
-							props.availableVideoDevices.map( (device, index) => {
-								return <a key={index}> { device.label } </a>
-							})
-						}
-						</div>
-					</div>
-				</div> */}
 			</button>
 			<button onClick={() => { props.hangup(false) }} className="btn btn-danger btn-round zoom__on-hover call__control call__control-hang" data-tippy-content="Hang up">
 				<i className="fas fa-phone-slash"></i>
@@ -81,7 +98,7 @@ function CallControls(props) {
 			<button className="btn btn-light btn-round zoom__on-hover call__control"  onClick={() => setModal(true) }>
 				<i className="fas fa-cog"></i>
 			</button>
-			<Modal show={showSettingsModal} onHide={ () => setModal('')} size="lg">
+			<Modal show={showSettingsModal} onHide={ () => setModal(false)} size="lg">
 				<Modal.Header closeButton>
 					<Modal.Title>Audio & Video</Modal.Title>
 				</Modal.Header>
@@ -92,11 +109,7 @@ function CallControls(props) {
 							Audio Source
 						</h4>
 						<div className="ml5">
-						{
-							props.availableAudioDevices.map( (device, index) => {
-								return <div> <a key={index}> { device.label } </a> </div>
-							})
-						}
+							{ listAudioDevices() }
 						</div>
 					</div>
 					<hr/>
@@ -106,11 +119,7 @@ function CallControls(props) {
 							Video Source
 						</h4>
 						<div className="ml5">
-						{
-							props.availableVideoDevices.map( (device, index) => {
-								return <div> <a key={index}> { device.label } </a> </div>
-							})
-						}
+							{ listVideoDevices() }
 						</div>
 					</div>
 				</Modal.Body>

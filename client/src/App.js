@@ -21,6 +21,7 @@ class App extends Component {
 		this.renderStyling = this.renderStyling.bind(this)
 		this.setTheme = this.setTheme.bind(this)
 		this.updateAppState = this.updateAppState.bind(this)
+		this.renderClass = this.renderClass.bind(this)
 	}
 	checkIfLoggedIn = async () => {
 		let o = {
@@ -115,6 +116,20 @@ class App extends Component {
 			color:color
 		})
 	}
+	renderClass(){
+		let c = '';
+		switch (this.state.theme) {
+			case 'white':
+				c = 'app__white';
+				break;
+			case 'dark':
+				c = 'app__dark';
+				break;
+			default:
+				break;
+		}
+		return 'App ' + c;
+	}
 	setTheme(newTheme){
 		this.setState({
 			theme:newTheme
@@ -130,7 +145,7 @@ class App extends Component {
 		const options = this.renderOptions();
 		const styling = this.renderStyling();
 		return (
-			<div className="App" style={ styling }>
+			<div className={ this.renderClass() } style={ styling }>
 				<header className="header">
 					<a className="logo__contain" href="/">
 						<img src={logo} className="logo" alt="logo" />
