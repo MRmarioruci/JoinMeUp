@@ -89,8 +89,8 @@ class UserPage extends Component {
 				</h3>
 				<div>
 					<button className="btn btn-primary" onClick={ () => this.showModal('showStartCallModal')}>Start call</button>
-					&nbsp;&nbsp;
-					<button className="btn btn-light" onClick={ () => this.showModal('showJoinCallModal')}>Join room</button>
+					<div class="vertical__separator"></div>
+					<button className="btn btn-dark" onClick={ () => this.showModal('showJoinCallModal')}>Join room</button>
 				</div>
 				<History/>
 				<Modal show={this.state.showStartCallModal} onHide={ () => this.closeModal('showStartCallModal')} size="lg">

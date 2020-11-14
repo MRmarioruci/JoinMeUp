@@ -30,7 +30,7 @@ function Forms(props) {
 										Login
 									</a>
 									<div className="vertical__separator"></div>
-									<a className="btn btn-secondary btn-200" href="registration">
+									<a className="btn btn-dark btn-200" href="registration">
 										Register
 									</a>
 								</div>

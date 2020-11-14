@@ -170,3 +170,21 @@
 	display: block;
 }
 .ml5{margin-left: 5px;}
+.history__item{
+	width: 100%;
+}
+.history__item span{
+	margin-left: 5px;
+}
+.history__right{
+	text-align: right;
+	display: inline-block;
+	float: right;
+}
+.history__left{
+	text-align: left;
+	display: inline-block;
+}
+.cp__clip{
+	display: inline-block;
+}

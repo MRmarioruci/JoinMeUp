@@ -55,45 +55,38 @@ function History() {
 				&nbsp;
 				<span>History</span>
 				{
-					rooms.length > 0 && 
-					<table className="table table-hover table-justify">
-						<tbody>
-							{
-								rooms.map( (room, index) => {
-									return (
-									<tr key={index}>
-										<th className="fnt17">{index+1}</th>
-										<th className="fnt17 table__30">{room.name}</th>
-										<th className="fnt17 table__30">{room.id}</th>
-										<th className="fnt17">
+					rooms.length > 0 &&
+					<div>
+						{
+							rooms.map( (room, index) => {
+								return (
+								<div key={index} className="history__item">
+									<div className="history__left">
+										<span className="fnt17">#{index+1}</span>
+										<span className="fnt17 table__30">{room.name}</span>
+									</div>
+									<div className="history__right">
+										<span className="fnt17">
 											<a className="btn btn-primary history__button" href={window.location.href+'call/'+room.name}>
 												<i className="fas fa-sign-in-alt"></i>&nbsp;
 												<span className="hidden-md">Join</span>
 											</a>
-										</th>
-										<th>
-											<CopyToClipboard text={window.location.href+'call/'+room.name}>
-												<button className="btn btn-success history__button" title="Copy to clipboard">
-													<i className="far fa-clipboard"></i>&nbsp;
-													<span className="hidden-md"> Copy</span>
-												</button>
-											</CopyToClipboard>
-										</th>
-										<th className="fnt17">
+										</span>
+										<span className="fnt17">
 											<button className="btn btn-danger history__button" onClick={ () => deleteHistory(room.room_id) }>
 												<i className="fas fa-trash"></i>&nbsp;
 												<span className="hidden-md">Delete</span>
 											</button>
-										</th>
-									</tr>
-									)
-								})
-							}
-						</tbody>
-					</table>
+										</span>
+									</div>
+								</div>
+								)
+							})
+						}
+					</div>
 				}
 				{
-					rooms.length == 0 && 
+					rooms.length == 0 &&
 					<div className="text-center"> No rooms joined yet.</div>
 				}
 			</h3>
