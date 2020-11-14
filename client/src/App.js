@@ -103,10 +103,12 @@ class App extends Component {
 			case 'white':
 				background = "#fff";
 				color = "";
+				document.getElementById('body').style.background = '#fff';
 				break;
 			case 'dark':
 				background = "#212224";
 				color = "#fff";
+				document.getElementById('body').style.background = '#212224';
 				break;
 			default:
 				break;
@@ -156,7 +158,7 @@ class App extends Component {
 				<div>
 					{ computedScreen }
 				</div>
-				<Footer></Footer>
+				{!this.state.username && <Footer></Footer> }
 			</div>
 		)
 	}

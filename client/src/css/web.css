@@ -34,24 +34,49 @@
 }
 .web{
 	width: 100%;
-	margin-top: -30px;
+	height: auto;
+	float: left;
+	overflow-y: hidden;
 }
 .web__left{
 	width: 50%;
-	display: inline-block;
+	float: left;
 }
 .web__right{
 	width: 50%;
-	display: inline-block;
+	float: left;
+}
+.web__right-inner{
+	margin-top: 120px;
 }
 .web__cover{
-	width: 100%;
+	max-height: 500px;
+	width: auto;
+	max-width: 100%;
 }
 .label__link{
 	color: #007bff;
 }
 @media only screen and (max-width: 850px) {
-  .web__right{
-	  width: 100%;
-  }
+	.web__left{
+		width: 100%;
+		text-align: center;
+	}
+	.web__left img{
+		margin: auto;
+		max-height: 300px;
+		height: 300px !important;
+	}
+	.web__right{
+		width: 100%;
+		text-align: center;
+	}
+	.web__right-inner{
+		margin: auto;
+		width: 100%;
+		margin-top: 10px
+	}
+	.web__right .btn{
+		width: 150px !important;
+	}
 }

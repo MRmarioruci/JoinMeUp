@@ -6,12 +6,27 @@
 	width:100%;
 	z-index:1;
 }
+.footer__center{
+	width: 33%;
+	float: left;
+	text-align: center;
+}
 .footer__right{
-	float: right;
+	width: 33%;
+	float: left;
+	text-align: right;
 }
 .footer__left{
+	width: 33%;
 	float: left;
+	text-align: left;
 }
 .close{
 	font-size: 50px !important;
+}
+.footer__credit{
+	width: 200px;
+	height: 200px;
+	float: left;
+	margin: auto;
 }

@@ -20,7 +20,7 @@ function Forms(props) {
 								<img src={props.theme == 'white' ? coverImage : coverImageInverted} className="web__cover" alt="logo" />
 							</div>
 							<div className="web__right">
-								<div>
+								<div className="web__right-inner">
 									<h3>One to one video calls made easy.</h3>
 									<h4>Connect with friends, family, work instantly without any registration.<br /> Just enter a username and enjoy.</h4>
 								</div>

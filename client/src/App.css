@@ -1,7 +1,8 @@
+html{overflow: hidden;}
 .App {
 	text-align: center;
 	height: 100%;
-	overflow-y: hidden;
+	margin-bottom: 100px;
 }
 
 .App-logo {
@@ -24,6 +25,10 @@
 	justify-content: center;
 	font-size: calc(10px + 2vmin);
 	color: white;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
 }
 
 .App-link {

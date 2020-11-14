@@ -66,23 +66,23 @@ function History() {
 										<th className="fnt17 table__30">{room.name}</th>
 										<th className="fnt17 table__30">{room.id}</th>
 										<th className="fnt17">
-											<a className="btn btn-primary" href={window.location.href+'call/'+room.name}>
+											<a className="btn btn-primary history__button" href={window.location.href+'call/'+room.name}>
 												<i className="fas fa-sign-in-alt"></i>&nbsp;
-												Join
+												<span className="hidden-md">Join</span>
 											</a>
 										</th>
 										<th>
 											<CopyToClipboard text={window.location.href+'call/'+room.name}>
-												<button className="btn btn-success" title="Copy to clipboard">
+												<button className="btn btn-success history__button" title="Copy to clipboard">
 													<i className="far fa-clipboard"></i>&nbsp;
-													<span> Copy</span>
+													<span className="hidden-md"> Copy</span>
 												</button>
 											</CopyToClipboard>
 										</th>
 										<th className="fnt17">
-											<button className="btn btn-danger" onClick={ () => deleteHistory(room.room_id) }>
+											<button className="btn btn-danger history__button" onClick={ () => deleteHistory(room.room_id) }>
 												<i className="fas fa-trash"></i>&nbsp;
-												Delete
+												<span className="hidden-md">Delete</span>
 											</button>
 										</th>
 									</tr>
