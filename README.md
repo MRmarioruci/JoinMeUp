@@ -16,15 +16,25 @@ Available soon at: https://joinmeup.com
      npm install
      npm client-install
      
-# Change client running port
+# Client ports
      cd project-folder/client
      Edit package.json
      "start": "BROWSER=none PORT=PORT_NUMBER_YOU_WANT react-scripts start",
-# Change server running port
+# Server ports
     cd project-folder
     Edit index.js
     const port = PORT_NUMBER_YOU_WANT;
     Or you can modify as you want
+    ----------------------------------
+    In order to connect to your db you have to specify these enviromental variables
+    SQL_HOST
+	  SQL_USER
+	  SQL_PASSWORD
+	  SQL_DATABASE
+    You can either
+    -> Create a .env file
+    -> If you are in a linux machine, create a service file
+    -> In your terminal type export SQL_HOST=YOUR HOST;
 # Run
     cd project-folder
     npm run dev
