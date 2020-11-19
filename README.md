@@ -14,7 +14,7 @@ Available soon at: https://joinmeup.com
   3. Install libs-dependencies
      cd project-folder
      npm install
-     npm client-install
+     npm run client-install
      
 # Client ports
      cd project-folder/client
