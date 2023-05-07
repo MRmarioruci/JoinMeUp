@@ -12,9 +12,9 @@ Available soon at: https://joinmeup.com
      https://doc-kurento.readthedocs.io/en/6.15.0/user/installation.html
   2. Import joinMeUp.sql
   3. Install libs-dependencies
-     cd project-folder
-     npm install
-     npm run client-install
+     <b>cd project-folder</b>
+     <b>npm install</b>
+     <b>npm run client-install</b>
      
 # Client ports
      cd project-folder/client
